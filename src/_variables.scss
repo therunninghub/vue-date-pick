@@ -1,0 +1,18 @@
+// Characters which are escaped by the escape-svg function
+$escaped-characters: (
+  ("<", "%3c"),
+  (">", "%3e"),
+  ("#", "%23"),
+  ("(", "%28"),
+  (")", "%29"),
+) !default;
+
+$white: #fff !default;
+
+$vdpColor: #7485c2 !default;
+$vdpTextColor: $white !default;
+$vdpClearButtonColor: #dc3545 !default;
+$vdpPeriodControlHoverTextColor: $white !default;
+$vdpPeriodControlHoverBackgroundColor: #6c757d !default;
+$vdpInputReadOnlyBackgroundColor: $white !default;
+$vdpPeriodControlButtonBorderRadius: 0.25rem !default;
