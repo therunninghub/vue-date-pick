@@ -352,9 +352,17 @@
   }
 
   &.month, &.year {
-    width: 5.357em;
-    padding: 0.3em;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
     border-radius: $vdpSelectedMonthBorderRadius;
+  }
+
+  &.month {
+    width: 5.857em;
+  }
+
+  &.year {
+    width: 3.5em;
   }
 }
 

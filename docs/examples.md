@@ -6,97 +6,91 @@ Vue Date Picker can be used in calendar widget form.
 <calendar-widget></calendar-widget>
 
 <details>
-    <summary>
-    Show code
-    </summary>
+  <summary>Show code</summary>
 
-```vue
-<template>
+  ```vue
+  <template>
     <vue-date-picker
-        v-model="date"
-        :hasInputElement="false"
+      v-model="date"
+      :hasInputElement="false"
     />
-</template>
+  </template>
 
-<script>
-import VueDatePicker from '@therunninghub/vue-date-picker';
+  <script>
+  import VueDatePicker from '@therunninghub/vue-date-picker';
 
-export default {
+  export default {
     components: { VueDatePicker },
     data: () => ({
-        date: '2019-02-12'
+      date: '2019-02-12'
     })
-};
-</script>
-```
+  };
+  </script>
+  ```
 </details>
 
 ## Date format
 Simple date picker with custom format (default is 'YYYY-MM-DD'):
 
 <picker-wrapper
-    value="2019.01.01"
-    :pickerProps="{format: 'YYYY.MM.DD'}"
-></picker-wrapper>
+  value="2019.01.01"
+  :pickerProps="{format: 'YYYY.MM.DD'}"
+/>
 
 <details>
-    <summary>
-    Show code
-    </summary>
+  <summary>Show code</summary>
 
-```vue
-<template>
+  ```vue
+  <template>
     <vue-date-picker
-        v-model="date"
-        :format="'YYYY.MM.DD'"
+      v-model="date"
+      :format="'YYYY.MM.DD'"
     />
-</template>
+  </template>
 
-<script>
-import VueDatePicker from '@therunninghub/vue-date-picker';
+  <script>
+  import VueDatePicker from '@therunninghub/vue-date-picker';
 
-export default {
+  export default {
     components: { VueDatePicker },
     data: () => ({
-        date: '2019.01.01'
+      date: '2019.01.01'
     })
-};
-</script>
-```
+  };
+  </script>
+  ```
 </details>
 
 ## Display format
 Use display format prop when UI date format is different from raw data format.
 
 <picker-wrapper
-    value="2019-01-01"
-    :pickerProps="{displayFormat: 'DD.MM.YYYY'}"
-></picker-wrapper>
+  value="2019-01-01"
+  :pickerProps="{displayFormat: 'DD.MM.YYYY'}"
+/>
 
 <details>
-    <summary>
-    Show code
-    </summary>
+  <summary>Show code</summary>
 
-```vue
-<template>
+  ```vue
+  <template>
     <vue-date-picker
-        v-model="date"
-        :displayFormat="'DD.MM.YYYY'"
+      v-model="date"
+      :displayFormat="'DD.MM.YYYY'"
     />
-</template>
+  </template>
 
-<script>
-import VueDatePicker from '@therunninghub/vue-date-picker';
+  <script>
+  import VueDatePicker from '@therunninghub/vue-date-picker';
 
-export default {
+  export default {
     components: { VueDatePicker },
     data: () => ({
-        date: '2019-01-01'
+      date: '2019-01-01'
     })
-};
-</script>
-```
+  };
+  </script>
+  ```
 </details>
 
 ## Custom date parser
@@ -106,317 +100,299 @@ If you need to work with complex date formats feel free to inject implementation
 <custom-engine></custom-engine>
 
 <details>
-    <summary>
-    Show code
-    </summary>
+  <summary>Show code</summary>
 
-```vue
-<template>
+  ```vue
+  <template>
     <vue-date-picker
-        v-model="date"
-        :format="format"
-        :parseDate="parseDate"
-        :formatDate="formatDate"
-        :inputAttributes="{size: 32}"
+      v-model="date"
+      :format="format"
+      :parseDate="parseDate"
+      :formatDate="formatDate"
+      :inputAttributes="{size: 32}"
     />
-</template>
+  </template>
 
-<script>
-import VueDatePicker from '@therunninghub/vue-date-picker';
-import fecha from 'fecha';
+  <script>
+  import VueDatePicker from '@therunninghub/vue-date-picker';
+  import fecha from 'fecha';
 
-export default {
+  export default {
     components: { VueDatePicker },
     data: () => ({
-        format: 'dddd MMMM Do, YYYY',
-        date: fecha.format(new Date(), 'dddd MMMM Do, YYYY')
+      format: 'dddd MMMM Do, YYYY',
+      date: fecha.format(new Date(), 'dddd MMMM Do, YYYY')
     }),
     methods: {
-        parseDate(dateString, format) {
-            return fecha.parse(dateString, format);
-        },
-        formatDate(dateObj, format) {
-            return fecha.format(dateObj, format);
-        }
+      parseDate(dateString, format) {
+        return fecha.parse(dateString, format);
+      },
+      formatDate(dateObj, format) {
+        return fecha.format(dateObj, format);
+      }
     }
-};
-</script>
-```
+  };
+  </script>
+  ```
 </details>
 
 ## Date time picker
 Date picker with controls for hours and minutes:
 
 <picker-wrapper
-    value="2019-01-01 14:30"
-    :pickerProps="{format: 'YYYY-MM-DD HH:mm', pickTime: true}"
-></picker-wrapper>
+  value="2019-01-01 14:30"
+  :pickerProps="{format: 'YYYY-MM-DD HH:mm', pickTime: true}"
+/>
 
 <details>
-    <summary>
-    Show code
-    </summary>
+  <summary>Show code</summary>
 
-```vue
-<template>
+  ```vue
+  <template>
     <vue-date-picker
-        v-model="date"
-        :pickTime="true"
-        :format="'YYYY-MM-DD HH:mm'"
+      v-model="date"
+      :pickTime="true"
+      :format="'YYYY-MM-DD HH:mm'"
     />
-</template>
+  </template>
 
-<script>
-import VueDatePicker from '@therunninghub/vue-date-picker';
+  <script>
+  import VueDatePicker from '@therunninghub/vue-date-picker';
 
-export default {
+  export default {
     components: { VueDatePicker },
     data: () => ({
-        date: '2019-01-01 14:30'
+      date: '2019-01-01 14:30'
     })
-};
-</script>
-```
+  };
+  </script>
+  ```
 </details>
 
 ## Date time picker (AM/PM)
 Date time picker with hours displayed using 12 hour clock:
 
 <picker-wrapper
-    value="2019-01-01 14:30"
-    :pickerProps="{format: 'YYYY-MM-DD HH:mm', displayFormat: 'YYYY.MM.DD H:mm A', pickTime: true, use12HourClock: true}"
-></picker-wrapper>
+  value="2019-01-01 14:30"
+  :pickerProps="{format: 'YYYY-MM-DD HH:mm', displayFormat: 'YYYY.MM.DD H:mm A', pickTime: true, use12HourClock: true}"
+/>
 
 <details>
-    <summary>
-    Show code
-    </summary>
+  <summary>Show code</summary>
 
-```vue
-<template>
+  ```vue
+  <template>
     <vue-date-picker
-        v-model="date"
-        :pickTime="true"
-        :use12HourClock="true"
-        :format="'YYYY-MM-DD HH:mm'"
-        :displayFormat="'YYYY.MM.DD H:mm A'"
+      v-model="date"
+      :pickTime="true"
+      :use12HourClock="true"
+      :format="'YYYY-MM-DD HH:mm'"
+      :displayFormat="'YYYY.MM.DD H:mm A'"
     />
-</template>
+  </template>
 
-<script>
-import VueDatePicker from '@therunninghub/vue-date-picker';
+  <script>
+  import VueDatePicker from '@therunninghub/vue-date-picker';
 
-export default {
+  export default {
     components: { VueDatePicker },
     data: () => ({
-        date: '2019-01-01 14:30'
+      date: '2019-01-01 14:30'
     })
-};
-</script>
-```
+  };
+  </script>
+  ```
 </details>
 
 ## Custom start period
 Open calendar UI with custom start month / year period:
 
 <picker-wrapper
-    value=""
-    :pickerProps="{startPeriod: {month: 0, year: 2020}}"
-></picker-wrapper>
+  value=""
+  :pickerProps="{ startPeriod: { month: 0, year: 2020 } }"
+/>
 
 <details>
-    <summary>
-    Show code
-    </summary>
+  <summary>Show code</summary>
 
-```vue
-<template>
+  ```vue
+  <template>
     <vue-date-picker
-        :startPeriod="{month: 0, year: 2020}}"
+      :startPeriod="{ month: 0, year: 2020 } }"
     />
-</template>
+  </template>
 
-<script>
-import VueDatePicker from '@therunninghub/vue-date-picker';
+  <script>
+  import VueDatePicker from '@therunninghub/vue-date-picker';
 
-export default {
+  export default {
     components: {VueDatePicker}
-};
-</script>
-```
+  };
+  </script>
+  ```
 </details>
 
 ## Custom content with slot
 Replace default input controls with custom slot content:
 
-<custom-input></custom-input>
+<custom-input />
 
 <details>
-    <summary>
-    Show code
-    </summary>
+  <summary>Show code</summary>
 
-```vue
-<template>
+  ```vue
+  <template>
     <vue-date-picker v-model="date">
-        <template v-slot:default="{toggle, inputValue}">
-            <button @click="toggle">
-                 {{ inputValue || 'Toggle calendar' }}
-            </button>
-        </template>
+      <template v-slot:default="{toggle, inputValue}">
+        <button @click="toggle">
+          {{ inputValue || 'Toggle calendar' }}
+        </button>
+      </template>
     </vue-date-picker>
-</template>
+  </template>
 
-<script>
-import VueDatePicker from '@therunninghub/vue-date-picker';
+  <script>
+  import VueDatePicker from '@therunninghub/vue-date-picker';
 
-export default {
+  export default {
     components: { VueDatePicker },
     data: () => ({
-        date: ''
+      date: ''
     })
-};
-</script>
-```
+  };
+  </script>
+  ```
 </details>
 
 ## Disabling dates
 Set "isDateDisabled" function as component prop to disable dates:
 
-<disabled-dates></disabled-dates>
+<disabled-dates />
 
 <details>
-    <summary>
-    Show code
-    </summary>
+  <summary>Show code</summary>
 
-```vue
-<template>
+  ```vue
+  <template>
     <vue-date-picker
-        v-model="date"
-        :isDateDisabled="isFutureDate"
+      v-model="date"
+      :isDateDisabled="isFutureDate"
     />
-</template>
+  </template>
 
-<script>
-import VueDatePicker from '@therunninghub/vue-date-picker';
+  <script>
+  import VueDatePicker from '@therunninghub/vue-date-picker';
 
-export default {
+  export default {
     components: { VueDatePicker },
     data: () => ({
-        date: ''
+      date: ''
     }),
     methods: {
-        isFutureDate(date) {
-            const currentDate = new Date();
-            return date > currentDate;
-        }
+      isFutureDate(date) {
+        const currentDate = new Date();
+        return date > currentDate;
+      }
     }
-};
-</script>
-```
+  };
+  </script>
+  ```
 </details>
 
 ## Disabling manual input
 Manual user input can be disabled by setting input readonly attribute via "inputAttributes" prop.
 
 <picker-wrapper
-    value="2019.01.01"
-    :pickerProps="{inputAttributes: {readonly: true}}"
-></picker-wrapper>
+  value="2019.01.01"
+  :pickerProps="{inputAttributes: {readonly: true}}"
+/>
 
 <details>
-    <summary>
-    Show code
-    </summary>
+  <summary>Show code</summary>
 
-```vue
-<template>
+  ```vue
+  <template>
     <vue-date-picker
-        v-model="date"
-        :inputAttributes="{readonly: true}"
+      v-model="date"
+      :inputAttributes="{readonly: true}"
     />
-</template>
+  </template>
 
-<script>
-import VueDatePicker from '@therunninghub/vue-date-picker';
+  <script>
+  import VueDatePicker from '@therunninghub/vue-date-picker';
 
-export default {
+  export default {
     components: { VueDatePicker },
     data: () => ({
-        date: '2018-12-29'
+      date: '2018-12-29'
     })
-};
-</script>
-```
+  };
+  </script>
+  ```
 </details>
 
 ## Disable editing and picker UI
 Disable input editing and calendar UI by setting "editable" prop to false.
 
 <picker-wrapper
-    value="2019.01.01"
-    :pickerProps="{editable: false}"
-></picker-wrapper>
+  value="2019.01.01"
+  :pickerProps="{editable: false}"
+/>
 
 <details>
-    <summary>
-    Show code
-    </summary>
+  <summary>Show code</summary>
 
-```vue
-<template>
+  ```vue
+  <template>
     <vue-date-picker
-        v-model="date"
-        :editable="false"
+      v-model="date"
+      :editable="false"
     />
-</template>
+  </template>
 
-<script>
-import VueDatePicker from '@therunninghub/vue-date-picker';
+  <script>
+  import VueDatePicker from '@therunninghub/vue-date-picker';
 
-export default {
+  export default {
     components: { VueDatePicker },
     data: () => ({
-        date: '2018-12-29'
+      date: '2018-12-29'
     })
-};
-</script>
-```
+  };
+  </script>
+  ```
 </details>
 
 ## Start week on Sunday
 Sunday can be set as the first day of the week via "startWeekOnSunday" prop.
 
 <picker-wrapper
-    value="2019.01.01"
-    :pickerProps="{startWeekOnSunday: true}"
-></picker-wrapper>
+  value="2019.01.01"
+  :pickerProps="{startWeekOnSunday: true}"
+/>
 
 <details>
-    <summary>
-    Show code
-    </summary>
+  <summary>Show code</summary>
 
-```vue
-<template>
+  ```vue
+  <template>
     <vue-date-picker
-        v-model="date"
-        :startWeekOnSunday="true"
+      v-model="date"
+      :startWeekOnSunday="true"
     />
-</template>
+  </template>
 
-<script>
-import VueDatePicker from '@therunninghub/vue-date-picker';
+  <script>
+  import VueDatePicker from '@therunninghub/vue-date-picker';
 
-export default {
+  export default {
     components: { VueDatePicker },
     data: () => ({
-        date: '2019-01-01'
+      date: '2019-01-01'
     })
-};
-</script>
-```
+  };
+  </script>
+  ```
 </details>
 
 ## Change selectable years
@@ -424,34 +400,66 @@ Dropdown for selecteble years can be customized via selectableYearRange prop
 (default value is 40 years from and after current year).
 
 <picker-wrapper
-    value="2019.01.01"
-    :pickerProps="{
-        selectableYearRange: {from: 2015, to: 2020}
-    }"
-></picker-wrapper>
+  value="2019.01.01"
+  :pickerProps="{
+    selectableYearRange: {from: 2015, to: 2020}
+  }"
+/>
 
 <details>
-    <summary>
-    Show code
-    </summary>
+  <summary>Show code</summary>
 
-```vue
-<template>
+  ```vue
+  <template>
     <vue-date-picker
-        v-model="date"
-        :selectableYearRange="{from: 1985, to: 2020}"
+      v-model="date"
+      :selectableYearRange="{from: 2015, to: 2020}"
     />
-</template>
+  </template>
 
-<script>
-import VueDatePicker from '@therunninghub/vue-date-picker';
+  <script>
+  import VueDatePicker from '@therunninghub/vue-date-picker';
 
-export default {
+  export default {
     components: { VueDatePicker },
     data: () => ({
-        date: '2019-01-01'
+      date: '2019-01-01'
     })
-};
-</script>
-```
+  };
+  </script>
+  ```
+</details>
+
+## Disable invalid months
+You can disable invalid months on selecting via prop `disableInvalidMonths` (default value is `false`)
+
+<picker-wrapper
+  value="2019.01.31"
+  :pickerProps="{
+    disableInvalidMonths: true
+  }"
+/>
+
+<details>
+  <summary>Show code</summary>
+
+  ```vue
+  <template>
+    <vue-date-picker
+      v-model="date"
+      :disableInvalidMonths="true"
+    />
+  </template>
+
+  <script>
+  import VueDatePicker from '@therunninghub/vue-date-picker';
+
+  export default {
+    components: { VueDatePicker },
+    data: () => ({
+      date: '2019-01-31'
+    })
+  };
+  </script>
+  ```
 </details>
