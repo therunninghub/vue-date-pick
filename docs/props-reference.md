@@ -27,7 +27,7 @@ inputAttributes: {
 },
 selectableYearRange: {
     type: [Number, Object, Function],
-    default: 40
+    default: undefined
 },
 disableInvalidMonths: {
   type: Boolean,
