@@ -143,8 +143,9 @@
                   class="vdpCell"
                   v-for="item in monthRow"
                   :class="{
-                    selectable: editable,
+                    selectable: editable && !item.disabled,
                     selected: item.value - 1 === currentPeriod.month,
+                    disabled: item.disabled
                   }"
                   :data-id="item.key"
                   :key="item.key"
@@ -260,14 +261,15 @@
 
 <script>
 import {
-  paddNum,
-  chunkArray,
   areSameDates,
+  boundNumber,
+  chunkArray,
+  isPM,
+  isValidDate,
+  padNum,
   range,
   to12HourClock,
-  to24HourClock,
-  isPM,
-  boundNumber
+  to24HourClock
 } from './utils/date';
 
 const formatRE = /,|\.|-| |:|\/|\\/;
@@ -305,7 +307,11 @@ export default {
     },
     selectableYearRange: {
       type: [Number, Object, Function],
-      default: 40
+      default: undefined
+    },
+    disableInvalidMonths: {
+      type: Boolean,
+      default: false
     },
     startPeriod: {
       type: Object
@@ -387,8 +393,9 @@ export default {
       opened: !this.hasInputElement,
       currentPeriod:
         this.startPeriod || this.getPeriodFromValue(this.value, this.format),
-      monthPerRow: 3,
-      yearPerRow: 3,
+      monthsPerRow: 3,
+      yearsPerRow: 5,
+      yearsPerPage: 20,
       tempYear: undefined,
       showMonthPicker: false,
       showYearPicker: false
@@ -469,15 +476,18 @@ export default {
       const computedMonths = [];
       const len = this.months.length;
       let i, j;
-      for (i = 0, j = len; i < j; i += this.monthPerRow) {
+      for (i = 0, j = len; i < j; i += this.monthsPerRow) {
         const monthRowValues = this.months
-          .slice(i, i + this.monthPerRow)
+          .slice(i, i + this.monthsPerRow)
           .map((m, k) => {
             const value = i + 1 + k;
             return {
               value,
               text: m,
-              key: `month-${value}`
+              key: `month-${value}`,
+              disabled:
+                this.disableInvalidMonths &&
+                !isValidDate(this.valueDate.getDate(), value, this.valueDate.getFullYear())
             };
           });
         computedMonths.push(monthRowValues);
@@ -490,19 +500,19 @@ export default {
       const computedYears = [];
       const currentYear = this.tempYear || this.currentPeriod.year;
       const startYear = Math.floor(currentYear / 10) * 10;
-      const years = range(startYear, startYear + 9);
+      const years = range(startYear, startYear + this.yearsPerPage - 1);
       const len = years.length;
 
       let i, j;
-      for (i = 0, j = len; i < j; i += this.yearPerRow) {
+      for (i = 0, j = len; i < j; i += this.yearsPerRow) {
         const yearRowValues = years
-          .slice(i, i + this.yearPerRow)
+          .slice(i, i + this.yearsPerRow)
           .map((value, index) => {
             return {
               value,
               text: value,
               key: `year-${value}`,
-              disabled: !this.yearRange.includes(value)
+              disabled: this.yearRange.length > 0 && !this.yearRange.includes(value)
             };
           });
         computedYears.push(yearRowValues);
@@ -532,11 +542,6 @@ export default {
         yearsRange = userRange(this);
       }
 
-      if (yearsRange.indexOf(currentYear) < 0) {
-        yearsRange.push(currentYear);
-        yearsRange = yearsRange.sort();
-      }
-
       return yearsRange;
     },
 
@@ -560,8 +565,8 @@ export default {
           ? to12HourClock(hours)
           : hours
         ).toString(),
-        minutesFormatted: paddNum(minutes, 2),
-        secondsFormatted: paddNum(seconds, 2)
+        minutesFormatted: padNum(minutes, 2),
+        secondsFormatted: padNum(seconds, 2)
       };
     },
 
@@ -671,9 +676,7 @@ export default {
         }
       }
 
-      const resolvedDate = new Date(
-        [paddNum(year, 4), paddNum(month, 2), paddNum(day, 2)].join('-')
-      );
+      const resolvedDate = new Date([padNum(year, 4), padNum(month, 2), padNum(day, 2)].join('-'));
 
       if (isNaN(resolvedDate)) {
         return undefined;
@@ -703,18 +706,18 @@ export default {
               .slice(-match.length)
           )
         )
-        .replace(monthRE, match => paddNum(date.getMonth() + 1, match.length))
-        .replace(dayRE, match => paddNum(date.getDate(), match.length))
+        .replace(monthRE, match => padNum(date.getMonth() + 1, match.length))
+        .replace(dayRE, match => padNum(date.getDate(), match.length))
         .replace(hoursRE, match =>
-          paddNum(
+          padNum(
             AMPMClockRE.test(dateFormat)
               ? to12HourClock(date.getHours())
               : date.getHours(),
             match.length
           )
         )
-        .replace(minutesRE, match => paddNum(date.getMinutes(), match.length))
-        .replace(secondsRE, match => paddNum(date.getSeconds(), match.length))
+        .replace(minutesRE, match => padNum(date.getMinutes(), match.length))
+        .replace(secondsRE, match => padNum(date.getSeconds(), match.length))
         .replace(AMPMClockRE, match => (isPM(date.getHours()) ? 'PM' : 'AM'));
     },
 
@@ -740,7 +743,7 @@ export default {
       }
       if (this.showYearPicker) {
         const year = this.tempYear || this.currentPeriod.year;
-        this.tempYear = Math.max(year - 10, 0);
+        this.tempYear = Math.max(year - this.yearsPerPage, 0);
         return;
       }
 
@@ -753,7 +756,7 @@ export default {
       }
       if (this.showYearPicker) {
         const year = this.tempYear || this.currentPeriod.year;
-        this.tempYear = Math.max(year + 10, 0);
+        this.tempYear = Math.max(year + this.yearsPerPage, 0);
         return;
       }
 
@@ -991,7 +994,7 @@ export default {
           ? to24HourClock(numValue, isPM(currentHours))
           : numValue
       );
-      event.target.value = paddNum(numValue, 1);
+      event.target.value = padNum(numValue, 1);
       this.$emit('input', this.formatDateToString(currentDate, this.format));
     },
 
@@ -1000,7 +1003,7 @@ export default {
       const targetValue = parseInt(event.target.value) || 0;
       const numValue = boundNumber(targetValue, 0, 59);
 
-      event.target.value = paddNum(numValue, 2);
+      event.target.value = padNum(numValue, 2);
       currentDate[method](numValue);
 
       this.$emit('input', this.formatDateToString(currentDate, this.format));

@@ -1,8 +1,33 @@
-export const paddNum = (num, padsize) => {
+const isLeapYear = (year) => ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
+
+export const isValidDate = (day, month, year) => {
+  const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+  // Adjust for leap years
+  if (isLeapYear(year)) {
+    monthLength[1] = 29;
+  }
+
+  if (year < 0) {
+    return false;
+  }
+
+  if (month < 1 || month > 12) {
+    return false;
+  }
+
+  if (day < 0 || day > monthLength[month - 1]) {
+    return false;
+  }
+
+  return true;
+};
+
+export const padNum = (num, padSize) => {
   return typeof num !== 'undefined'
-    ? num.toString().length > padsize
+    ? num.toString().length > padSize
       ? num
-      : new Array(padsize - num.toString().length + 1).join('0') + num
+      : new Array(padSize - num.toString().length + 1).join('0') + num
     : undefined;
 };
 
