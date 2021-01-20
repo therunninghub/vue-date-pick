@@ -1,290 +1,290 @@
 import {assert, expect} from 'chai';
 import {mount} from '@vue/test-utils';
-import VueDatePick from '../src/vueDatePick';
+import VueDatePicker from '../src/VueDatePicker';
 import Vue from 'vue';
 import fecha from 'fecha';
 
 describe('Vue date pick', () => {
 
-    it('renders input element with correct value', async () => {
+  it('renders input element with correct value', async () => {
 
-        const wrapper = mount(VueDatePick, {
-            propsData: {value: '2017-12-29'}
-        });
-
-        assert.equal(wrapper.find('input').element.value, '2017-12-29');
-
+    const wrapper = mount(VueDatePicker, {
+      propsData: {value: '2017-12-29'}
     });
 
-    it('renders display format correctly', async () => {
+    assert.equal(wrapper.find('input').element.value, '2017-12-29');
 
-        const wrapper = mount(VueDatePick, {
-            propsData: {value: '2017-12-29', displayFormat: 'DD.MM.YYYY'}
-        });
+  });
 
-        assert.equal(wrapper.find('input').element.value, '29.12.2017');
+  it('renders display format correctly', async () => {
 
-        wrapper.setProps({value: '2017-12-30'});
-        await Vue.nextTick();
-
-        assert.equal(wrapper.find('input').element.value, '30.12.2017');
-
+    const wrapper = mount(VueDatePicker, {
+      propsData: {value: '2017-12-29', displayFormat: 'DD.MM.YYYY'}
     });
 
-    it('emits correct input on date select', async () => {
+    assert.equal(wrapper.find('input').element.value, '29.12.2017');
 
-        const wrapper = mount(VueDatePick, {
-            propsData: {value: '2017-12-29', displayFormat: 'DD.MM.YYYY'}
-        });
+    wrapper.setProps({value: '2017-12-30'});
+    await Vue.nextTick();
 
-        wrapper.vm.open();
-        await Vue.nextTick();
+    assert.equal(wrapper.find('input').element.value, '30.12.2017');
 
-        wrapper.find('td[data-id="2017-12-30"]').trigger('click');
-        wrapper.find('input').setValue('31.12.2017');
-        wrapper.vm.close();
+  });
 
-        assert.deepEqual(wrapper.emitted().input, [
-            ['2017-12-30'],
-            ['2017-12-31']
-        ]);
+  it('emits correct input on date select', async () => {
 
+    const wrapper = mount(VueDatePicker, {
+      propsData: {value: '2017-12-29', displayFormat: 'DD.MM.YYYY'}
     });
 
-    it('can use alternate parsing engine', async () => {
+    wrapper.vm.open();
+    await Vue.nextTick();
 
-        const wrapper = mount(VueDatePick, {
-            propsData: {
-                value: '2017-12-29 05:30',
-                format: 'YYYY-MM-DD HH:mm',
-                displayFormat: 'DD.MM.YYYY [at] HH:mm',
-                parseDate(dateString, format) {
-                    return fecha.parse(dateString, format);
-                },
-                formatDate(date, format) {
-                    return fecha.format(date, format);
-                }
-            }
-        });
+    wrapper.find('td[data-id="2017-12-30"]').trigger('click');
+    wrapper.find('input').setValue('31.12.2017');
+    wrapper.vm.close();
 
-        assert.equal(wrapper.find('input').element.value, '29.12.2017 at 05:30');
+    assert.deepEqual(wrapper.emitted().input, [
+      ['2017-12-30'],
+      ['2017-12-31']
+    ]);
 
-        wrapper.vm.open();
-        await Vue.nextTick();
+  });
 
-        wrapper.find('td[data-id="2017-12-30"]').trigger('click');
+  it('can use alternate parsing engine', async () => {
 
-        assert.deepEqual(wrapper.emitted().input, [
-            ['2017-12-30 05:30']
-        ]);
-
+    const wrapper = mount(VueDatePicker, {
+      propsData: {
+        value: '2017-12-29 05:30',
+        format: 'YYYY-MM-DD HH:mm',
+        displayFormat: 'DD.MM.YYYY [at] HH:mm',
+        parseDate(dateString, format) {
+          return fecha.parse(dateString, format);
+        },
+        formatDate(date, format) {
+          return fecha.format(date, format);
+        }
+      }
     });
 
-    it('can function as time picker', async () => {
+    assert.equal(wrapper.find('input').element.value, '29.12.2017 at 05:30');
 
-        const wrapper = mount(VueDatePick, {
-            propsData: {
-                value: '2017-12-29 5:30:00',
-                format: 'YYYY-MM-DD HH:mm:ss',
-                pickTime: true,
-                pickMinutes: true,
-                pickSeconds: true
-            }
-        });
+    wrapper.vm.open();
+    await Vue.nextTick();
 
-        wrapper.vm.open();
-        await Vue.nextTick();
+    wrapper.find('td[data-id="2017-12-30"]').trigger('click');
 
-        wrapper.find('.vdpHoursInput').setValue('6');
-        wrapper.find('.vdpMinutesInput').setValue('15');
-        wrapper.find('.vdpHoursInput').setValue('24');
-        wrapper.find('.vdpHoursInput').setValue('-1');
+    assert.deepEqual(wrapper.emitted().input, [
+      ['2017-12-30 05:30']
+    ]);
 
-        assert.deepEqual(wrapper.emitted().input, [
-            ['2017-12-29 06:30:00'],
-            ['2017-12-29 05:15:00'],
-            ['2017-12-29 23:30:00'],
-            ['2017-12-29 00:30:00']
-        ]);
+  });
 
+  it('can function as time picker', async () => {
+
+    const wrapper = mount(VueDatePicker, {
+      propsData: {
+        value: '2017-12-29 5:30:00',
+        format: 'YYYY-MM-DD HH:mm:ss',
+        pickTime: true,
+        pickMinutes: true,
+        pickSeconds: true
+      }
     });
 
-    it('can function as time picker with 12 hour click', async () => {
+    wrapper.vm.open();
+    await Vue.nextTick();
 
-        const wrapper = mount(VueDatePick, {
-            propsData: {
-                value: '2017-12-29 5:30:00',
-                format: 'YYYY-MM-DD HH:mm:ss',
-                displayFormat: 'YYYY.MM.DD H:mm A',
-                pickTime: true,
-                use12HourClock: true
-            }
-        });
+    wrapper.find('.vdpHoursInput').setValue('6');
+    wrapper.find('.vdpMinutesInput').setValue('15');
+    wrapper.find('.vdpHoursInput').setValue('24');
+    wrapper.find('.vdpHoursInput').setValue('-1');
 
-        wrapper.vm.open();
-        await Vue.nextTick();
+    assert.deepEqual(wrapper.emitted().input, [
+      ['2017-12-29 06:30:00'],
+      ['2017-12-29 05:15:00'],
+      ['2017-12-29 23:30:00'],
+      ['2017-12-29 00:30:00']
+    ]);
 
-        assert.equal(wrapper.find('input').element.value, '2017.12.29 5:30 AM');
+  });
 
-        wrapper.find('.vdp12HourToggleBtn').trigger('click');
+  it('can function as time picker with 12 hour click', async () => {
 
-        assert.deepEqual(wrapper.emitted().input, [
-            ['2017-12-29 17:30:00']
-        ]);
-
+    const wrapper = mount(VueDatePicker, {
+      propsData: {
+        value: '2017-12-29 5:30:00',
+        format: 'YYYY-MM-DD HH:mm:ss',
+        displayFormat: 'YYYY.MM.DD H:mm A',
+        pickTime: true,
+        use12HourClock: true
+      }
     });
 
-    it('disables dates correctly', async () => {
+    wrapper.vm.open();
+    await Vue.nextTick();
 
-        const wrapper = mount(VueDatePick, {
-            propsData: {
-                value: '2017-12-29',
-                isDateDisabled: function(date) {
-                    const refDate = new Date('2017-12-29');
-                    return date > refDate;
-                }
-            }
-        });
+    assert.equal(wrapper.find('input').element.value, '2017.12.29 5:30 AM');
 
-        wrapper.vm.open();
-        await Vue.nextTick();
+    wrapper.find('.vdp12HourToggleBtn').trigger('click');
 
-        const el = wrapper.find('td[data-id="2017-12-30"]');
-        expect(el.classes()).to.include('disabled');
+    assert.deepEqual(wrapper.emitted().input, [
+      ['2017-12-29 17:30:00']
+    ]);
 
-        wrapper.find('td[data-id="2017-12-30"]').trigger('click');
+  });
 
-        assert.isUndefined(wrapper.emitted().input);
+  it('disables dates correctly', async () => {
 
+    const wrapper = mount(VueDatePicker, {
+      propsData: {
+        value: '2017-12-29',
+        isDateDisabled: function(date) {
+          const refDate = new Date('2017-12-29');
+          return date > refDate;
+        }
+      }
     });
 
-    it('starts week on monday', async () => {
+    wrapper.vm.open();
+    await Vue.nextTick();
 
-        const wrapper = mount(VueDatePick, {
-            propsData: {
-                value: '2017-12-29'
-            }
-        });
+    const el = wrapper.find('td[data-id="2017-12-30"]');
+    expect(el.classes()).to.include('disabled');
 
-        wrapper.vm.open();
-        await Vue.nextTick();
+    wrapper.find('td[data-id="2017-12-30"]').trigger('click');
 
-        assert.equal('Mon', wrapper.find('.vdpHeadCell:first-of-type span').text().trim());
-        assert.equal('Sun', wrapper.find('.vdpHeadCell:last-of-type span').text().trim());
+    assert.isUndefined(wrapper.emitted().input);
+
+  });
+
+  it('starts week on monday', async () => {
+
+    const wrapper = mount(VueDatePicker, {
+      propsData: {
+        value: '2017-12-29'
+      }
     });
 
-    it('can start week on sunday', async () => {
+    wrapper.vm.open();
+    await Vue.nextTick();
 
-        const wrapper = mount(VueDatePick, {
-            propsData: {
-                value: '2017-12-29',
-                startWeekOnSunday: true
-            }
-        });
+    assert.equal('Mon', wrapper.find('.vdpHeadCell:first-of-type span').text().trim());
+    assert.equal('Sun', wrapper.find('.vdpHeadCell:last-of-type span').text().trim());
+  });
 
-        wrapper.vm.open();
-        await Vue.nextTick();
+  it('can start week on sunday', async () => {
 
-        assert.equal('Sun', wrapper.find('.vdpHeadCell:first-of-type span').text().trim());
-        assert.equal('Sat', wrapper.find('.vdpHeadCell:last-of-type span').text().trim());
-
-        // Change year and assert again
-        wrapper.setProps({value: '2018-12-29'});
-        await Vue.nextTick();
-
-        assert.equal('Sun', wrapper.find('.vdpHeadCell:first-of-type span').text().trim());
-        assert.equal('Sat', wrapper.find('.vdpHeadCell:last-of-type span').text().trim());
+    const wrapper = mount(VueDatePicker, {
+      propsData: {
+        value: '2017-12-29',
+        startWeekOnSunday: true
+      }
     });
 
-    it('sets selected cells', async () => {
+    wrapper.vm.open();
+    await Vue.nextTick();
 
-        const wrapper = mount(VueDatePick);
+    assert.equal('Sun', wrapper.find('.vdpHeadCell:first-of-type span').text().trim());
+    assert.equal('Sat', wrapper.find('.vdpHeadCell:last-of-type span').text().trim());
 
-        wrapper.vm.open();
-        await Vue.nextTick();
+    // Change year and assert again
+    wrapper.setProps({value: '2018-12-29'});
+    await Vue.nextTick();
 
-        assert.isFalse(wrapper.find('td.selected').exists());
+    assert.equal('Sun', wrapper.find('.vdpHeadCell:first-of-type span').text().trim());
+    assert.equal('Sat', wrapper.find('.vdpHeadCell:last-of-type span').text().trim());
+  });
 
-        wrapper.setProps({value: '2017-12-29'});
-        await Vue.nextTick();
+  it('sets selected cells', async () => {
 
-        const el = wrapper.find('td[data-id="2017-12-29"]');
-        expect(el.classes()).to.include('selected');
+    const wrapper = mount(VueDatePicker);
 
+    wrapper.vm.open();
+    await Vue.nextTick();
+
+    assert.isFalse(wrapper.find('td.selected').exists());
+
+    wrapper.setProps({value: '2017-12-29'});
+    await Vue.nextTick();
+
+    const el = wrapper.find('td[data-id="2017-12-29"]');
+    expect(el.classes()).to.include('selected');
+
+  });
+
+  it('switches periods correctly', async () => {
+
+    const wrapper = mount(VueDatePicker, {
+      propsData: {value: '2017-12-29'}
     });
 
-    it('switches periods correctly', async () => {
+    wrapper.vm.open();
+    await Vue.nextTick();
+    wrapper.find('.vdpArrowNext').trigger('click');
+    await Vue.nextTick();
 
-        const wrapper = mount(VueDatePick, {
-            propsData: {value: '2017-12-29'}
-        });
+    assert.equal('January 2018', wrapper.findAll('.vdpPeriodControl > button').wrappers.map(
+      buttonWrap => buttonWrap.element.textContent.trim()
+    ).join(' '));
 
-        wrapper.vm.open();
-        await Vue.nextTick();
-        wrapper.find('.vdpArrowNext').trigger('click');
-        await Vue.nextTick();
+  });
 
-        assert.equal('January 2018', wrapper.findAll('.vdpPeriodControl > button').wrappers.map(
-            buttonWrap => buttonWrap.element.textContent.trim()
-        ).join(' '));
+  it('closes floater on outside click', async () => {
 
+    const wrapper = mount(VueDatePicker);
+
+    wrapper.vm.open();
+    await Vue.nextTick();
+
+    assert.isTrue(wrapper.vm.opened);
+
+    document.querySelector('body').click();
+
+    assert.isFalse(wrapper.vm.opened);
+
+  });
+
+  it('closes floater on escape press', async () => {
+
+    const wrapper = mount(VueDatePicker);
+
+    wrapper.vm.open();
+    await Vue.nextTick();
+
+    const event = new Event('keyup');
+    event.which = event.keyCode = 27;
+    document.dispatchEvent(event);
+
+    assert.isFalse(wrapper.vm.opened);
+
+  });
+
+  it('tolerates invalid user input', async () => {
+
+    const wrapper = mount(VueDatePicker);
+
+    wrapper.find('input').setValue('2017-12');
+    wrapper.find('input').setValue('2017-1229');
+
+    assert.deepEqual(wrapper.emitted().input, [
+      ['2017-12'],
+      ['2017-1229']
+    ]);
+
+  });
+
+  it('renders as calendar widget', async () => {
+
+    const wrapper = mount(VueDatePicker, {
+      propsData: {
+        hasInputElement: false
+      }
     });
 
-    it('closes floater on outside click', async () => {
+    assert.isFalse(wrapper.find('input').exists());
+    assert.isTrue(wrapper.find('.vdpTable').exists());
 
-        const wrapper = mount(VueDatePick);
-
-        wrapper.vm.open();
-        await Vue.nextTick();
-
-        assert.isTrue(wrapper.vm.opened);
-
-        document.querySelector('body').click();
-
-        assert.isFalse(wrapper.vm.opened);
-
-    });
-
-    it('closes floater on escape press', async () => {
-
-        const wrapper = mount(VueDatePick);
-
-        wrapper.vm.open();
-        await Vue.nextTick();
-
-        const event = new Event('keyup');
-        event.which = event.keyCode = 27;
-        document.dispatchEvent(event);
-
-        assert.isFalse(wrapper.vm.opened);
-
-    });
-
-    it('tolerates invalid user input', async () => {
-
-        const wrapper = mount(VueDatePick);
-
-        wrapper.find('input').setValue('2017-12');
-        wrapper.find('input').setValue('2017-1229');
-
-        assert.deepEqual(wrapper.emitted().input, [
-            ['2017-12'],
-            ['2017-1229']
-        ]);
-
-    });
-
-    it('renders as calendar widget', async () => {
-
-        const wrapper = mount(VueDatePick, {
-            propsData: {
-                hasInputElement: false
-            }
-        });
-
-        assert.isFalse(wrapper.find('input').exists());
-        assert.isTrue(wrapper.find('.vdpTable').exists());
-
-    });
+  });
 
 });
