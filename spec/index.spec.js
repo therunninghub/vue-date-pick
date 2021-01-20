@@ -4,7 +4,7 @@ import VueDatePicker from '../src/VueDatePicker';
 import Vue from 'vue';
 import fecha from 'fecha';
 
-describe('Vue date pick', () => {
+describe('Vue Date Picker', () => {
 
   it('renders input element with correct value', async () => {
 
