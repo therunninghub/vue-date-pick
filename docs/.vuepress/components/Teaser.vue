@@ -5,7 +5,7 @@
         <div class="textTeaser">
           <h2 class="title">Lightweight and mobile friendly date time picker</h2>
           <p class="text">
-            Vue date pick emphasizes performance, elegant and usable UI
+            Vue Date Picker emphasizes performance, elegant and usable UI
             on all screen sizes and simplicity of configuration.
             Has no dependencies on css frameworks or date libraries.
             Weighs less then 5KB.

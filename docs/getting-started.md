@@ -4,7 +4,7 @@ Install via node package manager:
 npm install @therunninghub/vue-date-picker
 ```
 Integrate into your application via standard Vue api for registering and using components.
-Vue date pick is designed for usage with v-model directive.
+Vue Date Picker is designed for usage with v-model directive.
 ```vue
 <template>
     <vue-date-picker v-model="date" />

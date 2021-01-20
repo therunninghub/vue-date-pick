@@ -1,7 +1,7 @@
 # Examples
 
 ## Calendar widget
-Vue date pick can be used in calendar widget form.
+Vue Date Picker can be used in calendar widget form.
 
 <calendar-widget></calendar-widget>
 
@@ -100,7 +100,7 @@ export default {
 </details>
 
 ## Custom date parser
-Vue date pick comes with simple date parser.
+Vue Date Picker comes with simple date parser.
 If you need to work with complex date formats feel free to inject implementation of your choice.
 
 <custom-engine></custom-engine>
