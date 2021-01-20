@@ -11,12 +11,12 @@ module.exports = {
 
   mode: isProduction ? 'production' : 'development',
 
-  entry: './src/vueDatePick.vue',
+  entry: './src/VueDatePicker.vue',
 
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'vueDatePick.js',
-    library: 'VueDatePick',
+    filename: 'VueDatePicker.js',
+    library: 'VueDatePicker',
     libraryExport: 'default',
     libraryTarget: 'umd',
     globalObject: 'typeof self !== \'undefined\' ? self : this'
@@ -71,6 +71,6 @@ module.exports = {
         path.join(__dirname, 'spec')
       ]
     }),
-    isProduction && new MiniCssExtractPlugin({filename: 'vueDatePick.css'})
+    isProduction && new MiniCssExtractPlugin({filename: 'VueDatePicker.css'})
   ].filter(i => i)
 };

@@ -1,6 +1,6 @@
 import {assert, expect} from 'chai';
 import {mount} from '@vue/test-utils';
-import VueDatePick from '../src/vueDatePick';
+import VueDatePicker from '../src/VueDatePicker';
 import Vue from 'vue';
 import fecha from 'fecha';
 
@@ -8,7 +8,7 @@ describe('Vue date pick', () => {
 
   it('renders input element with correct value', async () => {
 
-    const wrapper = mount(VueDatePick, {
+    const wrapper = mount(VueDatePicker, {
       propsData: {value: '2017-12-29'}
     });
 
@@ -18,7 +18,7 @@ describe('Vue date pick', () => {
 
   it('renders display format correctly', async () => {
 
-    const wrapper = mount(VueDatePick, {
+    const wrapper = mount(VueDatePicker, {
       propsData: {value: '2017-12-29', displayFormat: 'DD.MM.YYYY'}
     });
 
@@ -33,7 +33,7 @@ describe('Vue date pick', () => {
 
   it('emits correct input on date select', async () => {
 
-    const wrapper = mount(VueDatePick, {
+    const wrapper = mount(VueDatePicker, {
       propsData: {value: '2017-12-29', displayFormat: 'DD.MM.YYYY'}
     });
 
@@ -53,7 +53,7 @@ describe('Vue date pick', () => {
 
   it('can use alternate parsing engine', async () => {
 
-    const wrapper = mount(VueDatePick, {
+    const wrapper = mount(VueDatePicker, {
       propsData: {
         value: '2017-12-29 05:30',
         format: 'YYYY-MM-DD HH:mm',
@@ -82,7 +82,7 @@ describe('Vue date pick', () => {
 
   it('can function as time picker', async () => {
 
-    const wrapper = mount(VueDatePick, {
+    const wrapper = mount(VueDatePicker, {
       propsData: {
         value: '2017-12-29 5:30:00',
         format: 'YYYY-MM-DD HH:mm:ss',
@@ -111,7 +111,7 @@ describe('Vue date pick', () => {
 
   it('can function as time picker with 12 hour click', async () => {
 
-    const wrapper = mount(VueDatePick, {
+    const wrapper = mount(VueDatePicker, {
       propsData: {
         value: '2017-12-29 5:30:00',
         format: 'YYYY-MM-DD HH:mm:ss',
@@ -136,7 +136,7 @@ describe('Vue date pick', () => {
 
   it('disables dates correctly', async () => {
 
-    const wrapper = mount(VueDatePick, {
+    const wrapper = mount(VueDatePicker, {
       propsData: {
         value: '2017-12-29',
         isDateDisabled: function(date) {
@@ -160,7 +160,7 @@ describe('Vue date pick', () => {
 
   it('starts week on monday', async () => {
 
-    const wrapper = mount(VueDatePick, {
+    const wrapper = mount(VueDatePicker, {
       propsData: {
         value: '2017-12-29'
       }
@@ -175,7 +175,7 @@ describe('Vue date pick', () => {
 
   it('can start week on sunday', async () => {
 
-    const wrapper = mount(VueDatePick, {
+    const wrapper = mount(VueDatePicker, {
       propsData: {
         value: '2017-12-29',
         startWeekOnSunday: true
@@ -198,7 +198,7 @@ describe('Vue date pick', () => {
 
   it('sets selected cells', async () => {
 
-    const wrapper = mount(VueDatePick);
+    const wrapper = mount(VueDatePicker);
 
     wrapper.vm.open();
     await Vue.nextTick();
@@ -215,7 +215,7 @@ describe('Vue date pick', () => {
 
   it('switches periods correctly', async () => {
 
-    const wrapper = mount(VueDatePick, {
+    const wrapper = mount(VueDatePicker, {
       propsData: {value: '2017-12-29'}
     });
 
@@ -232,7 +232,7 @@ describe('Vue date pick', () => {
 
   it('closes floater on outside click', async () => {
 
-    const wrapper = mount(VueDatePick);
+    const wrapper = mount(VueDatePicker);
 
     wrapper.vm.open();
     await Vue.nextTick();
@@ -247,7 +247,7 @@ describe('Vue date pick', () => {
 
   it('closes floater on escape press', async () => {
 
-    const wrapper = mount(VueDatePick);
+    const wrapper = mount(VueDatePicker);
 
     wrapper.vm.open();
     await Vue.nextTick();
@@ -262,7 +262,7 @@ describe('Vue date pick', () => {
 
   it('tolerates invalid user input', async () => {
 
-    const wrapper = mount(VueDatePick);
+    const wrapper = mount(VueDatePicker);
 
     wrapper.find('input').setValue('2017-12');
     wrapper.find('input').setValue('2017-1229');
@@ -276,7 +276,7 @@ describe('Vue date pick', () => {
 
   it('renders as calendar widget', async () => {
 
-    const wrapper = mount(VueDatePick, {
+    const wrapper = mount(VueDatePicker, {
       propsData: {
         hasInputElement: false
       }

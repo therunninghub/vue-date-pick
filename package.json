@@ -1,13 +1,13 @@
 {
-  "name": "vue-date-pick",
-  "version": "1.4.1",
+  "name": "@therunninghub/vue-date-picker",
+  "version": "1.0.0",
   "description": "Date time picker based on Vue",
-  "homepage": "https://dbrekalo.github.io/vue-date-pick/",
+  "homepage": "https://opensource.therunninghub.net/projects/vue-date-picker/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dbrekalo/vue-date-pick"
+    "url": "https://github.com/therunninghub/vue-date-picker"
   },
-  "main": "dist/vueDatePick.js",
+  "main": "dist/VueDatePicker.js",
   "license": "MIT",
   "files": [
     "/dist",
@@ -24,11 +24,11 @@
   ],
   "scripts": {
     "dev": "npm run dev:docs",
-    "dev:docs": "vuepress dev documentation",
+    "dev:docs": "vuepress dev docs",
     "build": "npm run build:lib && npm run build:docs",
     "build:lib": "NODE_ENV=production webpack --progress",
-    "build:docs": "vuepress build documentation",
-    "lint": "eslint src/vueDatePick.vue -c .eslintrc.js --color",
+    "build:docs": "vuepress build docs",
+    "lint": "eslint src/VueDatePicker.vue -c .eslintrc.js --color",
     "test": "BABEL_ENV=test karma start --single-run --browsers ChromeHeadless",
     "watch:test": "BABEL_ENV=test karma start --browsers ChromeHeadless"
   },
