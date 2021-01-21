@@ -842,19 +842,14 @@ export default {
     inspectCloseEvent(event) {
       if (event.keyCode) {
         event.keyCode === 27 && this.close();
-      } else if (
-        !(event.target === this.$el) &&
-        !this.$el.contains(event.target)
-      ) {
-        if (!this.showMonthPicker && !this.showYearPicker) {
-          this.close();
+      } else if (!(event.target === this.$el) && !this.$el.contains(event.target)) {
+        if (
+          (event.target.classList.contains('month') || event.target.classList.contains('year')) &&
+          event.target.classList.contains('vdpCellContent')
+        ) {
+          return;
         }
-        if (this.showMonthPicker) {
-          this.toggleMonthPicker();
-        }
-        if (this.showYearPicker) {
-          this.toggleYearPicker();
-        }
+        this.close();
       }
     },
 
@@ -952,9 +947,7 @@ export default {
 
       this.$emit('input', this.formatDateToString(newDate, this.format));
 
-      if (!this.hasInputElement) {
-        this.toggleMonthPicker();
-      }
+      this.toggleMonthPicker();
     },
 
     selectYearItem(item) {
@@ -964,9 +957,7 @@ export default {
 
         this.$emit('input', this.formatDateToString(newDate, this.format));
 
-        if (!this.hasInputElement) {
-          this.toggleYearPicker();
-        }
+        this.toggleYearPicker();
       }
     },
 
