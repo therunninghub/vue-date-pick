@@ -46,7 +46,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #f5f5f5 url("/vue-date-pick/calendarWhite.svg") no-repeat right
+    background: #f5f5f5 url("/calendarWhite.svg") no-repeat right
       50px;
     background-size: 1050px;
   }
