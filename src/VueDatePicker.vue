@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="vdpComponent"
-    :class="{vdpWithInput: hasInputElement}"
-  >
+  <div class="vdpComponent" :class="{ vdpWithInput: hasInputElement }">
     <slot
       :open="open"
       :close="close"
@@ -20,21 +17,16 @@
         @input="editable && processUserInput($event.target.value)"
         @focus="editable && open()"
         @click="editable && open()"
-      >
-      <button
-        v-if="editable && hasInputElement && inputValue"
-        class="vdpClearInput"
-        type="button"
-        @click="clear"
       />
+      <button v-if="editable && hasInputElement && inputValue" class="vdpClearInput" type="button" @click="clear" />
     </slot>
     <transition name="vdp-toggle-calendar">
       <div
         v-if="opened"
-        class="vdpOuterWrap"
         ref="outerWrap"
+        class="vdpOuterWrap"
+        :class="[positionClass, { vdpFloating: hasInputElement }]"
         @click="closeViaOverlay"
-        :class="[positionClass, {vdpFloating: hasInputElement}]"
       >
         <div class="vdpInnerWrap">
           <header :class="['vdpHeader', showMonthPicker || showYearPicker ? '' : 'datePicker']">
@@ -62,54 +54,31 @@
             </button>
             <div class="vdpPeriodControls">
               <div class="vdpPeriodControl">
-                <button
-                  :class="directionClass"
-                  :key="currentPeriod.month"
-                  type="button"
-                  @click="toggleMonthPicker"
-                >
+                <button :key="currentPeriod.month" :class="directionClass" type="button" @click="toggleMonthPicker">
                   {{ months[currentPeriod.month] }}
                 </button>
               </div>
               <div class="vdpPeriodControl">
-                <button
-                  :class="directionClass"
-                  :key="currentPeriod.year"
-                  type="button"
-                  @click="toggleYearPicker"
-                >
+                <button :key="currentPeriod.year" :class="directionClass" type="button" @click="toggleYearPicker">
                   {{ currentPeriod.year }}
                 </button>
               </div>
             </div>
           </header>
-          <table
-            class="vdpTable"
-            v-if="!this.showMonthPicker && !this.showYearPicker"
-          >
+          <table v-if="!this.showMonthPicker && !this.showYearPicker" class="vdpTable">
             <thead>
               <tr>
-                <th
-                  class="vdpHeadCell"
-                  v-for="(weekday, weekdayIndex) in weekdaysSorted"
-                  :key="weekdayIndex"
-                >
-                  <span class="vdpHeadCellContent">{{weekday}}</span>
+                <th v-for="(weekday, weekdayIndex) in weekdaysSorted" :key="weekdayIndex" class="vdpHeadCell">
+                  <span class="vdpHeadCellContent">{{ weekday }}</span>
                 </th>
               </tr>
             </thead>
-            <tbody
-              :key="currentPeriod.year + '-' + currentPeriod.month"
-              :class="directionClass"
-            >
-              <tr
-                class="vdpRow"
-                v-for="(week, weekIndex) in currentPeriodDates"
-                :key="weekIndex"
-              >
+            <tbody :key="currentPeriod.year + '-' + currentPeriod.month" :class="directionClass">
+              <tr v-for="(week, weekIndex) in currentPeriodDates" :key="weekIndex" class="vdpRow">
                 <td
-                  class="vdpCell"
                   v-for="item in week"
+                  :key="item.dateKey"
+                  class="vdpCell"
                   :class="{
                     selectable: editable && !item.disabled,
                     selected: item.selected,
@@ -118,7 +87,6 @@
                     outOfRange: item.outOfRange
                   }"
                   :data-id="item.dateKey"
-                  :key="item.dateKey"
                   @click="editable && selectDateItem(item)"
                 >
                   <div class="vdpCellContent date">{{ item.date.getDate() }}</div>
@@ -126,29 +94,19 @@
               </tr>
             </tbody>
           </table>
-          <table
-            class="vdpTable"
-            v-if="this.showMonthPicker"
-          >
-            <tbody
-              :key="currentPeriod.year + '-' + currentPeriod.month"
-              :class="directionClass"
-            >
-              <tr
-                class="vdpRow"
-                v-for="(monthRow, rowIndex) in computedMonths"
-                :key="`month-row-${rowIndex}`"
-              >
+          <table v-if="this.showMonthPicker" class="vdpTable">
+            <tbody :key="currentPeriod.year + '-' + currentPeriod.month" :class="directionClass">
+              <tr v-for="(monthRow, rowIndex) in computedMonths" :key="`month-row-${rowIndex}`" class="vdpRow">
                 <td
-                  class="vdpCell"
                   v-for="item in monthRow"
+                  :key="item.key"
+                  class="vdpCell"
                   :class="{
                     selectable: editable && !item.disabled,
                     selected: item.value - 1 === currentPeriod.month,
                     disabled: item.disabled
                   }"
                   :data-id="item.key"
-                  :key="item.key"
                   @click="selectMonthItem(item)"
                 >
                   <div class="vdpCellContent month">{{ item.text }}</div>
@@ -156,29 +114,19 @@
               </tr>
             </tbody>
           </table>
-          <table
-            class="vdpTable"
-            v-if="this.showYearPicker"
-          >
-            <tbody
-              :key="currentPeriod.year + '-' + currentPeriod.month"
-              :class="directionClass"
-            >
-              <tr
-                class="vdpRow"
-                v-for="(yearRow, rowIndex) in computedYears"
-                :key="`year-row-${rowIndex}`"
-              >
+          <table v-if="this.showYearPicker" class="vdpTable">
+            <tbody :key="currentPeriod.year + '-' + currentPeriod.month" :class="directionClass">
+              <tr v-for="(yearRow, rowIndex) in computedYears" :key="`year-row-${rowIndex}`" class="vdpRow">
                 <td
-                  class="vdpCell"
                   v-for="item in yearRow"
+                  :key="item.key"
+                  class="vdpCell"
                   :class="{
                     selectable: editable && !item.disabled,
                     selected: item.value === currentPeriod.year,
                     disabled: item.disabled
                   }"
                   :data-id="item.key"
-                  :key="item.key"
                   @click="selectYearItem(item)"
                 >
                   <div class="vdpCellContent year">{{ item.text }}</div>
@@ -186,10 +134,7 @@
               </tr>
             </tbody>
           </table>
-          <div
-            v-if="pickTime && currentTime"
-            class="vdpTimeControls"
-          >
+          <div v-if="pickTime && currentTime" class="vdpTimeControls">
             <span class="vdpTimeCaption">{{ setTimeCaption }}</span>
             <div class="vdpTimeUnit">
               <pre><span>{{ currentTime.hoursFormatted }}</span><br></pre>
@@ -197,51 +142,39 @@
                 type="number"
                 pattern="\d*"
                 class="vdpHoursInput"
-                @input.prevent="inputHours"
-                @focusin="onTimeInputFocus"
                 :disabled="!editable"
                 :value="currentTime.hoursFormatted"
-              >
+                @input.prevent="inputHours"
+                @focusin="onTimeInputFocus"
+              />
             </div>
-            <span
-              v-if="pickMinutes"
-              class="vdpTimeSeparator"
-            >:</span>
-            <div
-              v-if="pickMinutes"
-              class="vdpTimeUnit"
-            >
+            <span v-if="pickMinutes" class="vdpTimeSeparator">:</span>
+            <div v-if="pickMinutes" class="vdpTimeUnit">
               <pre><span>{{ currentTime.minutesFormatted }}</span><br></pre>
               <input
                 v-if="pickMinutes"
                 type="number"
                 pattern="\d*"
                 class="vdpMinutesInput"
-                @input="inputTime('setMinutes', $event)"
-                @focusin="onTimeInputFocus"
                 :disabled="!editable"
                 :value="currentTime.minutesFormatted"
-              >
+                @input="inputTime('setMinutes', $event)"
+                @focusin="onTimeInputFocus"
+              />
             </div>
-            <span
-              v-if="pickSeconds"
-              class="vdpTimeSeparator"
-            >:</span>
-            <div
-              v-if="pickSeconds"
-              class="vdpTimeUnit"
-            >
+            <span v-if="pickSeconds" class="vdpTimeSeparator">:</span>
+            <div v-if="pickSeconds" class="vdpTimeUnit">
               <pre><span>{{ currentTime.secondsFormatted }}</span><br></pre>
               <input
                 v-if="pickSeconds"
                 type="number"
                 pattern="\d*"
                 class="vdpSecondsInput"
-                @input="inputTime('setSeconds', $event)"
-                @focusin="onTimeInputFocus"
                 :disabled="!editable"
                 :value="currentTime.secondsFormatted"
-              >
+                @input="inputTime('setSeconds', $event)"
+                @focusin="onTimeInputFocus"
+              />
             </div>
             <button
               v-if="use12HourClock"
@@ -391,8 +324,7 @@ export default {
       direction: undefined,
       positionClass: undefined,
       opened: !this.hasInputElement,
-      currentPeriod:
-        this.startPeriod || this.getPeriodFromValue(this.value, this.format),
+      currentPeriod: this.startPeriod || this.getPeriodFromValue(this.value, this.format),
       monthsPerRow: 3,
       yearsPerRow: 5,
       yearsPerPage: 20,
@@ -411,10 +343,7 @@ export default {
     },
 
     isReadOnly() {
-      return (
-        !this.editable ||
-        (this.inputAttributes && this.inputAttributes.readonly)
-      );
+      return !this.editable || (this.inputAttributes && this.inputAttributes.readonly);
     },
 
     isValidValue() {
@@ -456,17 +385,11 @@ export default {
       }
 
       // define day states
-      days.forEach(day => {
+      days.forEach((day) => {
         day.disabled = this.isDateDisabled(day.date);
         day.today = areSameDates(day.date, today);
-        day.dateKey = [
-          day.date.getFullYear(),
-          day.date.getMonth() + 1,
-          day.date.getDate()
-        ].join('-');
-        day.selected = this.valueDate
-          ? areSameDates(day.date, this.valueDate)
-          : false;
+        day.dateKey = [day.date.getFullYear(), day.date.getMonth() + 1, day.date.getDate()].join('-');
+        day.selected = this.valueDate ? areSameDates(day.date, this.valueDate) : false;
       });
 
       return chunkArray(days, 7);
@@ -477,19 +400,16 @@ export default {
       const len = this.months.length;
       let i, j;
       for (i = 0, j = len; i < j; i += this.monthsPerRow) {
-        const monthRowValues = this.months
-          .slice(i, i + this.monthsPerRow)
-          .map((m, k) => {
-            const value = i + 1 + k;
-            return {
-              value,
-              text: m,
-              key: `month-${value}`,
-              disabled:
-                this.disableInvalidMonths &&
-                !isValidDate(this.valueDate.getDate(), value, this.valueDate.getFullYear())
-            };
-          });
+        const monthRowValues = this.months.slice(i, i + this.monthsPerRow).map((m, k) => {
+          const value = i + 1 + k;
+          return {
+            value,
+            text: m,
+            key: `month-${value}`,
+            disabled:
+              this.disableInvalidMonths && !isValidDate(this.valueDate.getDate(), value, this.valueDate.getFullYear())
+          };
+        });
         computedMonths.push(monthRowValues);
       }
 
@@ -505,16 +425,14 @@ export default {
 
       let i, j;
       for (i = 0, j = len; i < j; i += this.yearsPerRow) {
-        const yearRowValues = years
-          .slice(i, i + this.yearsPerRow)
-          .map((value, index) => {
-            return {
-              value,
-              text: value,
-              key: `year-${value}`,
-              disabled: this.yearRange.length > 0 && !this.yearRange.includes(value)
-            };
-          });
+        const yearRowValues = years.slice(i, i + this.yearsPerRow).map((value, index) => {
+          return {
+            value,
+            text: value,
+            key: `year-${value}`,
+            disabled: this.yearRange.length > 0 && !this.yearRange.includes(value)
+          };
+        });
         computedYears.push(yearRowValues);
       }
 
@@ -529,15 +447,9 @@ export default {
       let yearsRange = [];
 
       if (userRangeType === 'number') {
-        yearsRange = range(
-          currentYear - userRange,
-          currentYear + userRange
-        );
+        yearsRange = range(currentYear - userRange, currentYear + userRange);
       } else if (userRangeType === 'object') {
-        yearsRange = range(
-          userRange.from,
-          userRange.to
-        );
+        yearsRange = range(userRange.from, userRange.to);
       } else if (userRangeType === 'function') {
         yearsRange = userRange(this);
       }
@@ -561,10 +473,7 @@ export default {
         minutes,
         seconds,
         isPM: isPM(hours),
-        hoursFormatted: (this.use12HourClock
-          ? to12HourClock(hours)
-          : hours
-        ).toString(),
+        hoursFormatted: (this.use12HourClock ? to12HourClock(hours) : hours).toString(),
         minutesFormatted: padNum(minutes, 2),
         secondsFormatted: padNum(seconds, 2)
       };
@@ -594,18 +503,10 @@ export default {
     },
 
     currentPeriod(currentPeriod, oldPeriod) {
-      const currentDate = new Date(
-        currentPeriod.year,
-        currentPeriod.month
-      ).getTime();
+      const currentDate = new Date(currentPeriod.year, currentPeriod.month).getTime();
       const oldDate = new Date(oldPeriod.year, oldPeriod.month).getTime();
 
-      this.direction =
-        currentDate !== oldDate
-          ? currentDate > oldDate
-            ? 'Next'
-            : 'Prev'
-          : undefined;
+      this.direction = currentDate !== oldDate ? (currentDate > oldDate ? 'Next' : 'Prev') : undefined;
 
       if (currentDate !== oldDate) {
         this.$emit('periodChange', {
@@ -625,10 +526,7 @@ export default {
     valueToInputFormat(value) {
       return !this.displayFormat
         ? value
-        : this.formatDateToString(
-          this.parseDateString(value, this.format),
-          this.displayFormat
-        ) || value;
+        : this.formatDateToString(this.parseDateString(value, this.format), this.displayFormat) || value;
     },
 
     getPeriodFromValue(dateString, format) {
@@ -698,38 +596,20 @@ export default {
 
     formatSimpleDateToString(date, dateFormat) {
       return dateFormat
-        .replace(yearRE, match =>
-          Number(
-            date
-              .getFullYear()
-              .toString()
-              .slice(-match.length)
-          )
+        .replace(yearRE, (match) => Number(date.getFullYear().toString().slice(-match.length)))
+        .replace(monthRE, (match) => padNum(date.getMonth() + 1, match.length))
+        .replace(dayRE, (match) => padNum(date.getDate(), match.length))
+        .replace(hoursRE, (match) =>
+          padNum(AMPMClockRE.test(dateFormat) ? to12HourClock(date.getHours()) : date.getHours(), match.length)
         )
-        .replace(monthRE, match => padNum(date.getMonth() + 1, match.length))
-        .replace(dayRE, match => padNum(date.getDate(), match.length))
-        .replace(hoursRE, match =>
-          padNum(
-            AMPMClockRE.test(dateFormat)
-              ? to12HourClock(date.getHours())
-              : date.getHours(),
-            match.length
-          )
-        )
-        .replace(minutesRE, match => padNum(date.getMinutes(), match.length))
-        .replace(secondsRE, match => padNum(date.getSeconds(), match.length))
-        .replace(AMPMClockRE, match => (isPM(date.getHours()) ? 'PM' : 'AM'));
+        .replace(minutesRE, (match) => padNum(date.getMinutes(), match.length))
+        .replace(secondsRE, (match) => padNum(date.getSeconds(), match.length))
+        .replace(AMPMClockRE, (match) => (isPM(date.getHours()) ? 'PM' : 'AM'));
     },
 
     jumpMonth(step = 1) {
-      const refDate = new Date(
-        this.currentPeriod.year,
-        this.currentPeriod.month
-      );
-      const jumpDate = new Date(
-        refDate.getFullYear(),
-        refDate.getMonth() + step
-      );
+      const refDate = new Date(this.currentPeriod.year, this.currentPeriod.month);
+      const jumpDate = new Date(refDate.getFullYear(), refDate.getMonth() + step);
 
       this.currentPeriod = {
         month: jumpDate.getMonth(),
@@ -764,17 +644,11 @@ export default {
     },
 
     processUserInput(userText) {
-      const userDate = this.parseDateString(
-        userText,
-        this.displayFormat || this.format
-      );
+      const userDate = this.parseDateString(userText, this.displayFormat || this.format);
 
       this.inputValue = userText;
 
-      this.$emit(
-        'input',
-        userDate ? this.formatDateToString(userDate, this.format) : userText
-      );
+      this.$emit('input', userDate ? this.formatDateToString(userDate, this.format) : userText);
     },
 
     toggleMonthPicker() {
@@ -806,8 +680,7 @@ export default {
     open() {
       if (!this.opened) {
         this.opened = true;
-        this.currentPeriod =
-          this.startPeriod || this.getPeriodFromValue(this.value, this.format);
+        this.currentPeriod = this.startPeriod || this.getPeriodFromValue(this.value, this.format);
         this.addCloseEvents();
         this.setupPosition();
       }
@@ -831,9 +704,8 @@ export default {
 
     addCloseEvents() {
       if (!this.closeEventListener) {
-        this.closeEventListener = e => this.inspectCloseEvent(e);
-
-        ['click', 'keyup', 'focusin'].forEach(eventName =>
+        this.closeEventListener = (e) => this.inspectCloseEvent(e);
+        ['click', 'keyup', 'focusin'].forEach((eventName) =>
           document.addEventListener(eventName, this.closeEventListener)
         );
       }
@@ -855,7 +727,7 @@ export default {
 
     removeCloseEvents() {
       if (this.closeEventListener) {
-        ['click', 'keyup', 'focusin'].forEach(eventName =>
+        ['click', 'keyup', 'focusin'].forEach((eventName) =>
           document.removeEventListener(eventName, this.closeEventListener)
         );
 
@@ -886,8 +758,7 @@ export default {
         if (window.innerWidth > this.mobileBreakpointWidth) {
           // vertical
           if (
-            inputRect.top + inputRect.height + floaterHeight >
-              window.innerHeight &&
+            inputRect.top + inputRect.height + floaterHeight > window.innerHeight &&
             inputRect.top - floaterHeight > 0
           ) {
             verticalClass = 'vdpPositionBottom';
@@ -898,11 +769,7 @@ export default {
             horizontalClass = 'vdpPositionRight';
           }
 
-          this.positionClass = [
-            'vdpPositionReady',
-            verticalClass,
-            horizontalClass
-          ].join(' ');
+          this.positionClass = ['vdpPositionReady', verticalClass, horizontalClass].join(' ');
         } else {
           this.positionClass = 'vdpPositionFixed';
         }
@@ -965,9 +832,7 @@ export default {
       const currentDate = new Date(this.valueDate);
       const currentHours = currentDate.getHours();
 
-      currentDate.setHours(
-        value === 'PM' ? currentHours + 12 : currentHours - 12
-      );
+      currentDate.setHours(value === 'PM' ? currentHours + 12 : currentHours - 12);
 
       this.$emit('input', this.formatDateToString(currentDate, this.format));
     },
@@ -980,11 +845,7 @@ export default {
       const maxHours = this.use12HourClock ? 12 : 23;
       const numValue = boundNumber(targetValue, minHours, maxHours);
 
-      currentDate.setHours(
-        this.use12HourClock
-          ? to24HourClock(numValue, isPM(currentHours))
-          : numValue
-      );
+      currentDate.setHours(this.use12HourClock ? to24HourClock(numValue, isPM(currentHours)) : numValue);
       event.target.value = padNum(numValue, 1);
       this.$emit('input', this.formatDateToString(currentDate, this.format));
     },
@@ -1008,5 +869,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "./VueDatePicker.scss";
+@import './VueDatePicker.scss';
 </style>
