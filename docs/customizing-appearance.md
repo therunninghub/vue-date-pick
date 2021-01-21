@@ -1,7 +1,7 @@
 # Customizing appearance
 
 ## CSS
-Vue Date pick colors can be adjusted with following selectors if you are using library css file directly (vue-date-pick/dist/VueDatePicker.css)
+Vue Date pick colors can be adjusted with following selectors if you are using library css file directly (@therunninghub/vue-date-picker/dist/VueDatePicker.css)
 ```css
 .vdpArrowPrev:after {
     border-right-color: #cc99cd;
@@ -28,9 +28,19 @@ Vue Date pick colors can be adjusted with following selectors if you are using l
 
 ## SCSS
 If you are compiling your css files with sass - library source scss file can be imported.
-Add $vdpColor to your scss variables to override default styling.
+Add your customizations to override default styling.
 
 ```scss
-$vdpColor: #cc99cd;
-@import '@therunninghub/vue-date-pick/src/VueDatePicker.scss';
+$vdpColor: #fe5800 !default;
+$vdpTextColor: $white !default;
+$vdpBorderRadius: 0.25rem !default;
+$vdpClearButtonColor: #dc3545 !default;
+$vdpPeriodControlHoverTextColor: $white !default;
+$vdpPeriodControlHoverBackgroundColor: #6c757d !default;
+$vdpInputReadOnlyBackgroundColor: $white !default;
+$vdpPeriodControlButtonBorderRadius: $vdpBorderRadius !default;
+$vdpSelectedDateBorderRadius: 100% !default;
+$vdpSelectedMonthBorderRadius: $vdpBorderRadius !default;
+
+@import '@therunninghub/vue-date-picker/src/VueDatePicker.scss';
 ```
