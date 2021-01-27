@@ -51,6 +51,48 @@ describe('Vue Date Picker', () => {
 
   });
 
+  it('emits correct input on month select', async () => {
+    const wrapper = mount(VueDatePicker, {
+      propsData: {value: '2021-01-01', displayFormat: 'DD.MM.YYYY'}
+    });
+
+    wrapper.vm.open();
+    await Vue.nextTick();
+
+    wrapper.find('button[data-id="current-month"]').trigger('click');
+    await Vue.nextTick();
+
+    wrapper.find('td[data-id="month-2"]').trigger('click');
+    await Vue.nextTick();
+
+    wrapper.vm.close();
+
+    assert.deepEqual(wrapper.emitted().input, [
+      ['2021-02-01']
+    ]);
+  });
+
+  it('emits correct input on year select', async () => {
+    const wrapper = mount(VueDatePicker, {
+      propsData: {value: '2021-01-01', displayFormat: 'DD.MM.YYYY'}
+    });
+
+    wrapper.vm.open();
+    await Vue.nextTick();
+
+    wrapper.find('button[data-id="current-year"]').trigger('click');
+    await Vue.nextTick();
+
+    wrapper.find('td[data-id="year-2020"]').trigger('click');
+    await Vue.nextTick();
+
+    wrapper.vm.close();
+
+    assert.deepEqual(wrapper.emitted().input, [
+      ['2020-01-01']
+    ]);
+  });
+
   it('can use alternate parsing engine', async () => {
 
     const wrapper = mount(VueDatePicker, {
