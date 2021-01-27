@@ -12,11 +12,35 @@ export const isValidDate = (day, month, year) => {
     return false;
   }
 
-  if (month < 1 || month > 12) {
+  if (!isValidMonth(month)) {
     return false;
   }
 
   if (day < 0 || day > monthLength[month - 1]) {
+    return false;
+  }
+
+  return true;
+};
+
+export const isValidMonth = (month) => {
+  if (!Number.isInteger(month)) {
+    return false;
+  }
+
+  if (month < 1 || month > 12) {
+    return false;
+  }
+
+  return true;
+};
+
+export const isValidFullYear = (fullYear) => {
+  if (!Number.isInteger(fullYear)) {
+    return false;
+  }
+
+  if (fullYear < 1000 || fullYear > 9999) {
     return false;
   }
 
