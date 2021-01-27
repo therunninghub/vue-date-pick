@@ -199,6 +199,8 @@ import {
   chunkArray,
   isPM,
   isValidDate,
+  isValidMonth,
+  isValidFullYear,
   padNum,
   range,
   to12HourClock,
@@ -809,18 +811,30 @@ export default {
     },
 
     selectMonthItem(item) {
-      const newDate = this.valueDate;
-      newDate.setMonth(item.value - 1);
+      if (!item.disabled) {
+        const newDate = this.updateValidDate({month: item.value});
 
-      this.$emit('input', this.formatDateToString(newDate, this.format));
+        if (this.currentTime) {
+          newDate.setHours(this.currentTime.hours);
+          newDate.setMinutes(this.currentTime.minutes);
+          newDate.setSeconds(this.currentTime.seconds);
+        }
 
-      this.toggleMonthPicker();
+        this.$emit('input', this.formatDateToString(newDate, this.format));
+
+        this.toggleMonthPicker();
+      }
     },
 
     selectYearItem(item) {
       if (!item.disabled) {
-        const newDate = this.valueDate;
-        newDate.setFullYear(item.value);
+        const newDate = this.updateValidDate({year: item.value});
+
+        if (this.currentTime) {
+          newDate.setHours(this.currentTime.hours);
+          newDate.setMinutes(this.currentTime.minutes);
+          newDate.setSeconds(this.currentTime.seconds);
+        }
 
         this.$emit('input', this.formatDateToString(newDate, this.format));
 
@@ -863,6 +877,30 @@ export default {
 
     onTimeInputFocus(event) {
       event.target.select && event.target.select();
+    },
+
+    updateValidDate({month, year}) {
+      const valueDate = this.valueDate || new Date();
+      const datePart = this.currentPeriod;
+
+      if (isValidMonth(month)) {
+        datePart.month = month;
+      }
+
+      if (isValidFullYear(year)) {
+        datePart.year = year;
+      }
+
+      if (!isValidDate(valueDate.getDate(), datePart.month, datePart.year)) {
+        datePart.month = month + 1;
+        datePart.date = 0;
+      } else {
+        datePart.date = valueDate.getDate();
+      }
+
+      valueDate.setFullYear(datePart.year, datePart.month - 1, datePart.date);
+
+      return valueDate;
     }
   }
 };

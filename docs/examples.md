@@ -30,6 +30,37 @@ Vue Date Picker can be used in calendar widget form.
 </details>
 
 ## Date format
+Simple date picker without empty value:
+
+<picker-wrapper
+  :value="''"
+  :pickerProps="{format: 'YYYY.MM.DD'}"
+/>
+
+<details>
+  <summary>Show code</summary>
+
+  ```vue
+  <template>
+    <vue-date-picker
+      v-model="date"
+      :format="'YYYY.MM.DD'"
+    />
+  </template>
+
+  <script>
+  import VueDatePicker from '@therunninghub/vue-date-picker';
+
+  export default {
+    components: { VueDatePicker },
+    data: () => ({
+      date: undefined
+    })
+  };
+  </script>
+  ```
+</details>
+
 Simple date picker with custom format (default is 'YYYY-MM-DD'):
 
 <picker-wrapper
