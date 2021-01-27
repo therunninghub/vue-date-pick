@@ -54,12 +54,12 @@
             </button>
             <div class="vdpPeriodControls">
               <div class="vdpPeriodControl">
-                <button :key="currentPeriod.month" :class="directionClass" type="button" @click="toggleMonthPicker">
+                <button :key="currentPeriod.month" data-id="current-month" :class="directionClass" type="button" @click="toggleMonthPicker">
                   {{ months[currentPeriod.month] }}
                 </button>
               </div>
               <div class="vdpPeriodControl">
-                <button :key="currentPeriod.year" :class="directionClass" type="button" @click="toggleYearPicker">
+                <button :key="currentPeriod.year" data-id="current-year" :class="directionClass" type="button" @click="toggleYearPicker">
                   {{ currentPeriod.year }}
                 </button>
               </div>
@@ -409,7 +409,7 @@ export default {
             text: m,
             key: `month-${value}`,
             disabled:
-              this.disableInvalidMonths && !isValidDate(this.valueDate.getDate(), value, this.valueDate.getFullYear())
+              this.disableInvalidMonths && !isValidDate(this.valueDate.getDate(), value - 1, this.valueDate.getFullYear())
           };
         });
         computedMonths.push(monthRowValues);
@@ -812,7 +812,7 @@ export default {
 
     selectMonthItem(item) {
       if (!item.disabled) {
-        const newDate = this.updateValidDate({month: item.value});
+        const newDate = this.updateValidDate({month: item.value - 1});
 
         if (this.currentTime) {
           newDate.setHours(this.currentTime.hours);
@@ -883,6 +883,8 @@ export default {
       const valueDate = this.valueDate || new Date();
       const datePart = this.currentPeriod;
 
+      datePart.date = valueDate.getDate();
+
       if (isValidMonth(month)) {
         datePart.month = month;
       }
@@ -891,14 +893,12 @@ export default {
         datePart.year = year;
       }
 
-      if (!isValidDate(valueDate.getDate(), datePart.month, datePart.year)) {
+      if (!isValidDate(datePart.date, datePart.month, datePart.year)) {
         datePart.month = month + 1;
         datePart.date = 0;
-      } else {
-        datePart.date = valueDate.getDate();
       }
 
-      valueDate.setFullYear(datePart.year, datePart.month - 1, datePart.date);
+      valueDate.setFullYear(datePart.year, datePart.month, datePart.date);
 
       return valueDate;
     }
