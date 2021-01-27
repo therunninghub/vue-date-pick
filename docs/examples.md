@@ -30,7 +30,7 @@ Vue Date Picker can be used in calendar widget form.
 </details>
 
 ## Date format
-Simple date picker without empty value:
+Simple date picker with empty value:
 
 <picker-wrapper
   :value="''"
