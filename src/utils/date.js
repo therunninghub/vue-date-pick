@@ -28,7 +28,7 @@ export const isValidMonth = (month) => {
     return false;
   }
 
-  if (month < 1 || month > 12) {
+  if (month < 0 || month > 11) {
     return false;
   }
 
