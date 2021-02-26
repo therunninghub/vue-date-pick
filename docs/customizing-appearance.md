@@ -1,7 +1,7 @@
 # Customizing appearance
 
 ## CSS
-Vue Date pick colors can be adjusted with following selectors if you are using library css file directly (@therunninghub/vue-date-picker/dist/VueDatePicker.css)
+Vue Date Picker colors can be adjusted with following selectors if you are using library css file directly (@therunninghub/vue-date-picker/dist/VueDatePicker.css)
 ```css
 .vdpArrowPrev:after {
     border-right-color: #cc99cd;

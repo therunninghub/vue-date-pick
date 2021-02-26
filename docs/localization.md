@@ -1,6 +1,6 @@
 # Localization
 
-Following props to are used to localize your date pick instance:
+Following props to are used to localize your Vue Date Picker instance:
 
 ```js
 nextMonthCaption: {type: String, default: 'Next month'},

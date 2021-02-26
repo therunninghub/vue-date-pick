@@ -1,6 +1,6 @@
 # Props reference
 
-List of all props available on vue date pick component:
+List of all props available on Vue Date Picker component:
 
 ```js
 value: {
